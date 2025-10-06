@@ -24,7 +24,7 @@ export default function AllOrders() {
 
             <div>
                 {orders.map((order) =>
-                    <Card className="my-3">
+                    <Card className="my-3" key={order.id}>
                         <CardContent>
 
                             <div key={order.id} className="grid grid-cols-3 items-center">

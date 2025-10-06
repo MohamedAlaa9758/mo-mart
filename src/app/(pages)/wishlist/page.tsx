@@ -3,7 +3,7 @@ import Loading from '@/app/loading';
 import CardDeisgin from '@/components/CardDeisgin/CardDeisgin';
 import { Button } from '@/components/ui/button';
 import { WishlistContext } from '@/components/WishlistContext/WishlistContext';
-import { ItemListI } from '@/interfaces';
+import { ProductI } from '@/interfaces';
 import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react';
 
@@ -12,7 +12,7 @@ export default function WishList({ productId }: { productId: string }) {
     const inWishlist = wishlist.includes(productId);
     const [isloading, setIsLoading] = useState(false);
     const [isRemoving, setIsRemoving] = useState(false);
-    const [items, setItems] = useState<ItemListI[]>([]);
+    const [items, setItems] = useState<ProductI[]>([]);
     async function getList() {
         setIsLoading(true)
         const response = await fetch('https://ecommerce.routemisr.com/api/v1/wishlist',
@@ -48,7 +48,7 @@ export default function WishList({ productId }: { productId: string }) {
             {isloading ? <Loading /> :
                 items.length > 0 ?
                     items?.map((item) =>
-                        <CardDeisgin product={item} />
+                        <CardDeisgin product={item} key={item.id} />
 
                     )
                     :
@@ -56,6 +56,7 @@ export default function WishList({ productId }: { productId: string }) {
                         <h2>Your Wish list is Empty</h2>
                         <Link href='/products'>
                             <Button
+                                onClick={() => handleClick()}
                                 className=" cursor-pointer mb-4 bg-black text-white">
                                 Add ones
                             </Button>

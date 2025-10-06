@@ -3,7 +3,7 @@ import { CategoryI } from "./category";
 export interface ProductI {
   sold: number;
   images: string[];
-  subcategory: CategoryI[];
+  subcategory?: CategoryI[];
   ratingsQuantity: number;
   _id: string;
   title: string;

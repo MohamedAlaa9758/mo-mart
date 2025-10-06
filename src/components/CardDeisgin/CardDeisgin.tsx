@@ -4,8 +4,9 @@ import Image from 'next/image'
 import StarIcon from '../StarIcon/StarIcon'
 import Link from 'next/link'
 import AddToCart from '../AddToCart/AddToCart'
+import { ProductI } from '@/interfaces'
 
-export default function CardDeisgin({ product }: { product: any }) {
+export default function CardDeisgin({ product }: { product: ProductI }) {
     return <>
         <div className="w-full md:w-1/2  lg:w-1/3 px-1 my-2 relative  ">
             <div className=" absolute top-2 end-4 ">

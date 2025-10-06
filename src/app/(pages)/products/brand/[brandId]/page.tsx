@@ -5,7 +5,7 @@ import { Params } from 'next/dist/server/request/params';
 
 
 export default async function BrandProduct({ params }: { params: Params }) {
-    let { brandId } = params;
+    const { brandId } = params;
     const response = await fetch('https://ecommerce.routemisr.com/api/v1/products?brand=' + brandId)
     const { data: products }: { data: ProductI[] } = await response.json();
 
@@ -14,7 +14,7 @@ export default async function BrandProduct({ params }: { params: Params }) {
         <h1 className='text-center capitalize'>All products in the brand</h1>
         <div className="flex flex-wrap my-4">
             {products.map((product) => (
-                <CardDeisgin product={product} />
+                <CardDeisgin product={product} key={product.id} />
             ))}
         </div>
     </>

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card"
 import { CartResponse } from "@/interfaces";
 import { Loader2, Trash2 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import toast from "react-hot-toast";
@@ -90,7 +91,7 @@ export default function Cart() {
 
 
   return <>
-    {isLoading || typeof cartData?.data?.products[0]?.product == 'string' && getCart() ? <Loading /> : cartData?.numOfCartItems! > 0 ?
+    {isLoading || typeof cartData?.data?.products[0]?.product == 'string' && getCart() ? <Loading /> : cartData?.numOfCartItems ?? 0 > 0 ?
       <div className="container min-h-screen ">
         <div className="text-center my-4">
           <h1>Shopping Cart</h1>
@@ -101,7 +102,7 @@ export default function Cart() {
             {cartData?.data.products.map((item) =>
               <Card key={item._id} className="grid grid-cols-3 ">
                 <div className="col-span-1  mx-auto">
-                  <img src={item.product.imageCover} className="w-24  object-cover md:w-26" alt={item.product.title} />
+                  <Image width={100} height={100} src={item.product.imageCover} className="w-24  object-cover md:w-26" alt={item.product.title} />
                 </div>
                 <CardContent className="col-span-2  ">
                   <div className="flex justify-between ">
@@ -159,16 +160,16 @@ export default function Cart() {
                     <p className="text-gray-500">Shopping</p>
                   </div>
                   <div>
-                    <h2> {formatCurrency(cartData?.data.totalCartPrice!)}</h2>
+                    <h2> {formatCurrency(cartData?.data.totalCartPrice ?? 0)}</h2>
                     <p className="text-green-600 font-bold text-center">Free</p>
                   </div>
                 </div>
                 <hr className="my-4 text-gray-500" />
                 <div className="flex justify-between">
                   <h2> Total</h2>
-                  <h2> {formatCurrency(cartData?.data.totalCartPrice!)}</h2>
+                  <h2> {formatCurrency(cartData?.data.totalCartPrice ?? 0)}</h2>
                 </div>
-                <Checkout cartId={cartData?.cartId!} />
+                <Checkout cartId={cartData?.cartId ?? ''} />
                 <Link href='/products'>
                   <Button size='lg' variant={"outline"} className="w-full cursor-pointer mb-4">Continue Shopping</Button>
                 </Link>

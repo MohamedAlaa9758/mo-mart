@@ -7,7 +7,6 @@ import { signIn } from 'next-auth/react'
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -35,7 +34,7 @@ const formSchema = z.object({
 type FormField = z.infer<typeof formSchema>
 export default function RegisterForm() {
     const [isloading, setIsloading] = useState(false)
-    let searchParams = useSearchParams()
+    const searchParams = useSearchParams()
 
     const form = useForm<FormField>({
         resolver: zodResolver(formSchema),
