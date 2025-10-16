@@ -15,6 +15,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import toast from "react-hot-toast";
+import { UpdatcountAction } from "./_action/updatCount";
+import { RemoveItem } from "./_action/removeItem";
+import { DeleteCart } from "./_action/deletCat";
 
 
 export default function Cart() {
@@ -32,16 +35,7 @@ export default function Cart() {
 
   async function removeItem(productId: string) {
     setRemovingId(productId)
-    const response = await fetch('https://ecommerce.routemisr.com/api/v1/cart/' + productId,
-      {
-        method: 'DELETE',
-        headers: {
-          token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDkzODY0NTNjMmZkMjM4YTY2OWU5YSIsIm5hbWUiOiJtb2hhbWVkIGFsYWEiLCJyb2xlIjoidXNlciIsImlhdCI6MTc1OTA2NjIzMiwiZXhwIjoxNzY2ODQyMjMyfQ.3v2qo6kZHF5_pakDZLeT8rIuUo9kn6pIUy0PYbA01yM",
-        },
-      }
-    )
-    const data: CartResponse = await response.json();
+    const data = await RemoveItem(productId)
     if (data.status = 'success') {
       toast.success('Product Removed Succesfully')
       setCartData(data)
@@ -51,18 +45,7 @@ export default function Cart() {
   }
   async function updatItemCount(productId: string, count: number) {
     setIsUpdataCount(productId)
-    const response = await fetch('https://ecommerce.routemisr.com/api/v1/cart/' + productId,
-      {
-        method: 'PUT',
-        body: JSON.stringify({ count }),
-        headers: {
-          token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDkzODY0NTNjMmZkMjM4YTY2OWU5YSIsIm5hbWUiOiJtb2hhbWVkIGFsYWEiLCJyb2xlIjoidXNlciIsImlhdCI6MTc1OTA2NjIzMiwiZXhwIjoxNzY2ODQyMjMyfQ.3v2qo6kZHF5_pakDZLeT8rIuUo9kn6pIUy0PYbA01yM",
-          "Content-Type": "application/json"
-        },
-      }
-    )
-    const data: CartResponse = await response.json();
+    const data = await UpdatcountAction(productId, count)
     if (data.status = 'success') {
       toast.success('Product Updata Count Succesfully')
       setCartData(data)
@@ -72,16 +55,7 @@ export default function Cart() {
   }
   async function clearCart() {
     setIsClear(true)
-    const response = await fetch('https://ecommerce.routemisr.com/api/v1/cart/',
-      {
-        method: 'DELETE',
-        headers: {
-          token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDkzODY0NTNjMmZkMjM4YTY2OWU5YSIsIm5hbWUiOiJtb2hhbWVkIGFsYWEiLCJyb2xlIjoidXNlciIsImlhdCI6MTc1OTA2NjIzMiwiZXhwIjoxNzY2ODQyMjMyfQ.3v2qo6kZHF5_pakDZLeT8rIuUo9kn6pIUy0PYbA01yM",
-        },
-      }
-    )
-    const data: CartResponse = await response.json();
+    const data = await DeleteCart()
     if (data.message = 'success') {
       setCartData(data)
     }
