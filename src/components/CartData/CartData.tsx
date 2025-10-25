@@ -35,7 +35,15 @@ export default function CartContextProvider({ children }: { children: ReactNode 
 
                 const cartOwner = data?.data?.cartOwner;
                 if (cartOwner) {
-                    localStorage.setItem("userId", cartOwner);
+                    if (typeof window !== "undefined") {
+                        if (cartOwner) {
+                            localStorage.setItem("userId", cartOwner);
+                        } else {
+                            console.warn("⚠️ No cartOwner found in API response:", data);
+                        }
+                    }
+
+                    // localStorage.setItem("userId", cartOwner);
                 } else {
                     console.warn("⚠️ No cartOwner found in API response:", data);
                 }
@@ -43,7 +51,10 @@ export default function CartContextProvider({ children }: { children: ReactNode 
                 setCartData(data ?? null);
             } else {
                 setCartData(null);
-                localStorage.removeItem("userId");
+                if (typeof window !== "undefined") {
+                    localStorage.removeItem("userId");
+                }
+                // localStorage.removeItem("userId");
             }
         } catch (error) {
             console.error("❌ Error fetching cart:", error);
