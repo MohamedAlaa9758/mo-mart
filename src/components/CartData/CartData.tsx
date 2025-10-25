@@ -25,7 +25,7 @@ export default function CartContextProvider({ children }: { children: ReactNode 
     const getCart = async () => {
         try {
             if (session.status === "authenticated") {
-                const response = await fetch(`${process.env.URL_API}/get-cart`);
+                const response = await fetch("/api/get-cart");
                 if (!response.ok) {
                     throw new Error(`Failed to fetch cart: ${response.status}`);
                 }
