@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@layer base {
+  .container {
+    @apply mx-auto;
+  }
+  h1 {
+    @apply text-5xl font-semibold;
+  }
+  h2 {
+    @apply text-xl font-semibold;
+  }
+}
