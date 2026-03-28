@@ -1,10 +1,11 @@
 import AddToCart from "@/components/AddToCart/AddToCart";
+import AddToWishList from "@/components/AddToWishList/AddToWishList";
 import ImageSlider from "@/components/ImageSlider/ImageSlider";
 import StarIcon from "@/components/StarIcon/StarIcon";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProductI } from "@/interfaces";
-import { HeartIcon } from "lucide-react";
 import { Params } from "next/dist/server/request/params";
+
 export default async function ProductDetails({ params }: { params: Params }) {
   const { productId } = params;
 
@@ -13,12 +14,12 @@ export default async function ProductDetails({ params }: { params: Params }) {
 
   return (
     <>
-      <Card className="grid md:grid-cols-3 items-center my-5 mx-2 relative ">
-        <div className=" absolute top-2 end-4 ">
-          <HeartIcon />
+      <Card className="grid md:grid-cols-3 items-center my-5 mx-2 relative">
+        <div className="absolute top-2 end-4">
+          <AddToWishList productId={product.id} />
         </div>
 
-        <div className="md:col-span-1  ">
+        <div className="md:col-span-1">
           <ImageSlider images={product.images} altContent={product.title} />
         </div>
         <div className="md:col-span-2 space-y-5 p-4">
