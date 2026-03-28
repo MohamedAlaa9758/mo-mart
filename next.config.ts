@@ -2,8 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  // images: {
+  //   domains: ["ecommerce.routemisr.com"],
+  // },
   images: {
-    domains: ["ecommerce.routemisr.com"],
+    remotePatterns: [{ protocol: "https", hostname: "example.com" }],
   },
 };
 
