@@ -11,7 +11,8 @@ export default auth((req) => {
     if (token) {
       return NextResponse.next();
     } else {
-      const redirectUrl = new URL("/login", process.env.NEXT_PUBLIC_BASE_URL);
+      // const redirectUrl = new URL("/login", process.env.NEXT_PUBLIC_BASE_URL);
+      const redirectUrl = new URL("/login", req.nextUrl.origin);
       redirectUrl.searchParams.set("callback-url", req.nextUrl.pathname);
       return NextResponse.redirect(redirectUrl);
     }
@@ -21,7 +22,8 @@ export default auth((req) => {
     if (!token) {
       return NextResponse.next();
     } else {
-      const redirectUrl = new URL("/", process.env.NEXT_PUBLIC_BASE_URL);
+      // const redirectUrl = new URL("/", process.env.NEXT_PUBLIC_BASE_URL);
+      const redirectUrl = new URL("/", req.nextUrl.origin);
       return NextResponse.redirect(redirectUrl);
     }
   }
