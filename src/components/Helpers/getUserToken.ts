@@ -1,37 +1,70 @@
+// // // import { decode } from "next-auth/jwt";
+// // // import { cookies } from "next/headers";
+
+// // // export async function getUserToken() {
+// // //   const x = (await cookies()).get("next-auth.session-token")?.value;
+// // //   const accessToken = await decode({ token: x, secret: process.env.NEXTAUTH_SECRET! });
+// // //   return accessToken?.token;
+// // // }
 // // import { decode } from "next-auth/jwt";
 // // import { cookies } from "next/headers";
 
 // // export async function getUserToken() {
-// //   const x = (await cookies()).get("next-auth.session-token")?.value;
-// //   const accessToken = await decode({ token: x, secret: process.env.NEXTAUTH_SECRET! });
+// //   const x = (await cookies()).get("authjs.session-token")?.value;
+// //   const accessToken = await decode({
+// //     token: x,
+// //     secret: process.env.NEXTAUTH_SECRET!,
+// //     salt: "authjs.session-token",
+// //   });
 // //   return accessToken?.token;
 // // }
 // import { decode } from "next-auth/jwt";
 // import { cookies } from "next/headers";
 
 // export async function getUserToken() {
-//   const x = (await cookies()).get("authjs.session-token")?.value;
+//   const allCookies = await cookies();
+
+//   // على Vercel بيكون اسمه مختلف
+//   const cookieName = process.env.NODE_ENV === "production" ? "__Secure-authjs.session-token" : "authjs.session-token";
+
+//   const x = allCookies.get(cookieName)?.value;
+
 //   const accessToken = await decode({
 //     token: x,
-//     secret: process.env.NEXTAUTH_SECRET!,
-//     salt: "authjs.session-token",
+//     // secret: process.env.NEXTAUTH_SECRET!,
+//     secret: process.env.AUTH_SECRET!,
+//     salt: cookieName,
 //   });
+
 //   return accessToken?.token;
 // }
+
 import { decode } from "next-auth/jwt";
 import { cookies } from "next/headers";
 
 export async function getUserToken() {
   const allCookies = await cookies();
 
-  // على Vercel بيكون اسمه مختلف
-  const cookieName = process.env.NODE_ENV === "production" ? "__Secure-authjs.session-token" : "authjs.session-token";
+  // جرب كل الأسماء المحتملة
+  const possibleNames = ["__Secure-authjs.session-token", "authjs.session-token", "__Secure-next-auth.session-token", "next-auth.session-token"];
 
-  const x = allCookies.get(cookieName)?.value;
+  let x: string | undefined;
+  let cookieName: string = "";
+
+  for (const name of possibleNames) {
+    const val = allCookies.get(name)?.value;
+    if (val) {
+      x = val;
+      cookieName = name;
+      break;
+    }
+  }
+
+  if (!x) return null;
 
   const accessToken = await decode({
     token: x,
-    secret: process.env.NEXTAUTH_SECRET!,
+    secret: process.env.AUTH_SECRET!,
     salt: cookieName,
   });
 
