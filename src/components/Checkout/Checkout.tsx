@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { CartResponse } from '@/interfaces'
 import { Loader2 } from 'lucide-react'
-export default function Checkout({ cartId }: { cartId: string }) {
+export default function Checkout({ cartId, token }: { cartId: string, token: string }) {
     const cityInput = useRef<HTMLInputElement | null>(null)
     const detailsInput = useRef<HTMLInputElement | null>(null)
     const phoneInput = useRef<HTMLInputElement | null>(null)
@@ -29,13 +29,15 @@ export default function Checkout({ cartId }: { cartId: string }) {
             city: cityInput.current?.value
         }
         setIsloadingSession(true)
-        const response = await fetch(`https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${CartId}?url=http://localhost:3000`,
+        // const response = await fetch(`https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${CartId}?url=http://localhost:3000`,
+        const response = await fetch(`https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${CartId}?url=${window.location.origin}`,
             {
                 method: 'POST',
                 body: JSON.stringify({ shippingAddress }),
                 headers: {
-                    token:
-                        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDkzODY0NTNjMmZkMjM4YTY2OWU5YSIsIm5hbWUiOiJtb2hhbWVkIGFsYWEiLCJyb2xlIjoidXNlciIsImlhdCI6MTc1OTA2NjIzMiwiZXhwIjoxNzY2ODQyMjMyfQ.3v2qo6kZHF5_pakDZLeT8rIuUo9kn6pIUy0PYbA01yM",
+                    // token:
+                    //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDkzODY0NTNjMmZkMjM4YTY2OWU5YSIsIm5hbWUiOiJtb2hhbWVkIGFsYWEiLCJyb2xlIjoidXNlciIsImlhdCI6MTc1OTA2NjIzMiwiZXhwIjoxNzY2ODQyMjMyfQ.3v2qo6kZHF5_pakDZLeT8rIuUo9kn6pIUy0PYbA01yM",
+                    token: token,
                     "Content-Type": "application/json"
 
                 },

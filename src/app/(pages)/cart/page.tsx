@@ -9,7 +9,7 @@ import {
   CardContent,
   CardHeader,
 } from "@/components/ui/card"
-
+import { useSession } from "next-auth/react";
 import { Loader2, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,7 +30,8 @@ export default function Cart() {
   const [isUpdataCount, setIsUpdataCount] = useState<string | null>(null)
   const [isClear, setIsClear] = useState(false)
   const [loading, setLoading] = useState(false)
-
+  const { data: session } = useSession();
+  const token = (session?.user as any)?.token ?? '';
 
 
   async function removeItem(productId: string) {
@@ -149,7 +150,8 @@ export default function Cart() {
                     <h2> Total</h2>
                     <h2> {formatCurrency(cartData?.data.totalCartPrice ?? 0)}</h2>
                   </div>
-                  <Checkout cartId={cartData?.cartId ?? ''} />
+                  {/* <Checkout cartId={cartData?.cartId ?? ''} /> */}
+                  <Checkout cartId={cartData?.cartId ?? ''} token={token} />
                   <Link href='/products'>
                     <Button size='lg' variant={"outline"} className="w-full cursor-pointer mb-4">Continue Shopping</Button>
                   </Link>
