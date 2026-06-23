@@ -41,6 +41,9 @@ export default function Navbar() {
                 <Link href={"/wishlist"}>
                   <DropdownMenuItem>Wish-List</DropdownMenuItem>
                 </Link>
+                <Link href={"/allorders"}>
+                  <DropdownMenuItem>All-Orders</DropdownMenuItem>
+                </Link>
               </DropdownMenuContent>
             </DropdownMenu>
             <Link href={"/"}>
@@ -66,6 +69,11 @@ export default function Navbar() {
                 <NavigationMenuItem>
                   <NavigationMenuLink asChild>
                     <Link href="/wishlist">Wish-List</Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuLink asChild>
+                    <Link href="/allorders">All-Orders</Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList>
