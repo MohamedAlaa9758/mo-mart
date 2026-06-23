@@ -63,8 +63,9 @@ export default function Checkout({ cartId, token }: { cartId: string, token: str
                 method: 'POST',
                 body: JSON.stringify({ shippingAddress }),
                 headers: {
-                    token:
-                        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDkzODY0NTNjMmZkMjM4YTY2OWU5YSIsIm5hbWUiOiJtb2hhbWVkIGFsYWEiLCJyb2xlIjoidXNlciIsImlhdCI6MTc1OTA2NjIzMiwiZXhwIjoxNzY2ODQyMjMyfQ.3v2qo6kZHF5_pakDZLeT8rIuUo9kn6pIUy0PYbA01yM",
+                    // token:
+                    //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDkzODY0NTNjMmZkMjM4YTY2OWU5YSIsIm5hbWUiOiJtb2hhbWVkIGFsYWEiLCJyb2xlIjoidXNlciIsImlhdCI6MTc1OTA2NjIzMiwiZXhwIjoxNzY2ODQyMjMyfQ.3v2qo6kZHF5_pakDZLeT8rIuUo9kn6pIUy0PYbA01yM",
+                    token: token,
                     "Content-Type": "application/json"
 
                 },
