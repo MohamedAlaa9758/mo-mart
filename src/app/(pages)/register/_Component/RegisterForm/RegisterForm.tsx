@@ -15,8 +15,9 @@ import {
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { useState } from "react"
-import { Loader2 } from "lucide-react"
+import { Loader2, Eye, EyeOff } from "lucide-react" // تم إضافة Eye و EyeOff هنا
 import { useSearchParams } from "next/navigation"
+
 const formSchema = z.object({
     name: z.string().nonempty('Name is Required').min(3, "Name is at least 3 carcter")
         .max(20, "Name is at most 20 carcter"),
@@ -24,19 +25,26 @@ const formSchema = z.object({
     password: z.string().nonempty('Password is Required')
         .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 'invalid password'),
     rePassword: z.string().nonempty("Repassword is Required "),
-
     phone: z.string().nonempty('Phone is Required').regex(/^(010|011|012|015)\d{8}$/
         , 'inValid Phone')
 }).refine((data) => data.password === data.rePassword, {
     path: ["rePassword"],
-    message: "Password and rePassword ont match",
+    message: "Password and rePassword don't match",
 });
-type FormField = z.infer<typeof formSchema>
+
+// تغيير الاسم هنا لمنع التعارض مع مكون FormField
+type RegisterFormValues = z.infer<typeof formSchema>
+
 export default function RegisterForm() {
     const [isloading, setIsloading] = useState(false)
+
+    // حالات التحكم في إظهار وإخفاء الباسورد
+    const [showPassword, setShowPassword] = useState(false)
+    const [showRePassword, setShowRePassword] = useState(false)
+
     const searchParams = useSearchParams()
 
-    const form = useForm<FormField>({
+    const form = useForm<RegisterFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
@@ -47,7 +55,7 @@ export default function RegisterForm() {
         },
     })
 
-    async function onSubmit(values: FormField) {
+    async function onSubmit(values: RegisterFormValues) {
         try {
             setIsloading(true);
             const registerResponse = await fetch("https://ecommerce.routemisr.com/api/v1/auth/signup", {
@@ -65,7 +73,6 @@ export default function RegisterForm() {
                 return;
             }
 
-
             await signIn("credentials", {
                 redirect: true,
                 callbackUrl: "/login",
@@ -81,13 +88,11 @@ export default function RegisterForm() {
         }
     }
 
-    return (<>
-
+    return (
         <Card className="w-sm p-5">
-            {searchParams.get('error') ?
-                <h2 className="text-red-500 text-center">{searchParams.get('error')}</h2>
-                : ''
-            }
+            {searchParams.get('error') && (
+                <h2 className="text-red-500 text-center mb-4">{searchParams.get('error')}</h2>
+            )}
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormField
@@ -97,7 +102,7 @@ export default function RegisterForm() {
                             <FormItem>
                                 <FormLabel>Name</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Your Name" type="name"{...field} />
+                                    <Input placeholder="Your Name" type="text" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -110,12 +115,14 @@ export default function RegisterForm() {
                             <FormItem>
                                 <FormLabel>Email</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Ali@example.com" type="email"{...field} />
+                                    <Input placeholder="Ali@example.com" type="email" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
+
+                    {/* حقل كلمة المرور الأساسي */}
                     <FormField
                         control={form.control}
                         name="password"
@@ -123,25 +130,56 @@ export default function RegisterForm() {
                             <FormItem>
                                 <FormLabel>Password</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Ahmed@1234" type="password"{...field} />
+                                    <div className="relative">
+                                        <Input
+                                            placeholder="Ahmed@1234"
+                                            type={showPassword ? "text" : "password"}
+                                            className="pr-10" // مساحة إضافية لزر العين
+                                            {...field}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                        >
+                                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                        </button>
+                                    </div>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
+
+                    {/* حقل تأكيد كلمة المرور */}
                     <FormField
                         control={form.control}
                         name="rePassword"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>RePassword</FormLabel>
+                                <FormLabel>Confirm Password</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Ahmed@1234" type="password"{...field} />
+                                    <div className="relative">
+                                        <Input
+                                            placeholder="Ahmed@1234"
+                                            type={showRePassword ? "text" : "password"}
+                                            className="pr-10"
+                                            {...field}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowRePassword(!showRePassword)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                        >
+                                            {showRePassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                        </button>
+                                    </div>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
+
                     <FormField
                         control={form.control}
                         name="phone"
@@ -149,7 +187,7 @@ export default function RegisterForm() {
                             <FormItem>
                                 <FormLabel>Phone</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="01012345678" type="phone"{...field} />
+                                    <Input placeholder="01012345678" type="tel" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -158,11 +196,10 @@ export default function RegisterForm() {
                     <Button type="submit"
                         disabled={isloading}
                         className="bg-black text-white cursor-pointer w-full">
-                        {isloading && <Loader2 className="animate-spin" />}Submit
+                        {isloading && <Loader2 className="animate-spin mr-2" />}Submit
                     </Button>
                 </form>
             </Form>
         </Card>
-    </>
     )
 }
